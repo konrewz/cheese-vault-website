@@ -1,0 +1,63 @@
+.floating-x { position: fixed; z-index: 25; right: max(20px, env(safe-area-inset-right)); bottom: calc(max(20px, env(safe-area-inset-bottom)) + var(--social-lift, 0px)); width: 50px; height: 50px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #fff; background: #211c17; border: 1px solid var(--color-border); box-shadow: 0 6px 20px #0003; text-decoration: none; transition: transform 160ms, box-shadow 160ms; }
+.floating-x[hidden], body:has(dialog[open]) .floating-x, body:has(.wallet-popover) .floating-x { display: none; }
+.floating-x:hover { transform: translateY(-3px); box-shadow: 0 9px 25px #0004; }
+.floating-x:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 4px; }
+[data-theme="dark"] .floating-x { color: #171411; background: #f6ead4; }
+.social-tooltip { position: absolute; right: 62px; white-space: nowrap; padding: 8px 12px; border-radius: 9px; color: var(--color-text-primary); background: var(--color-bg-raised); border: 1px solid var(--color-border); font-size: 13px; opacity: 0; visibility: hidden; pointer-events: none; transform: translateX(4px); transition: opacity 160ms, transform 160ms; }
+.floating-x:hover .social-tooltip,.floating-x:focus-visible .social-tooltip { opacity: 1; visibility: visible; transform: none; }
+.footer-x { display: inline-flex; align-items: center; gap: 7px; }
+.footer-x svg { width: 14px; height: 14px; }
+.main-nav { gap: 21px; }
+.treasury-hero { display: grid; grid-template-columns: 1fr 230px; align-items: center; gap: 32px; margin: 16px 0 44px; }
+.treasury-hero h1 { font-size: clamp(2.5rem,4.5vw,4.1rem); line-height: 1.06; margin: 16px 0 20px; letter-spacing: -.035em; }
+.treasury-hero p { max-width: 550px; color: var(--color-text-secondary); font-size: 1.1rem; }
+.treasury-hero .eyebrow { display: inline-flex; align-items: center; gap: 9px; }
+.treasury-tags { display: flex; flex-wrap: wrap; gap: 10px 20px; font-size: .8rem; font-weight: 700; margin-top: 20px; }
+.treasury-tags span { display: inline-flex; align-items: center; gap: 6px; }
+.treasury-mascot { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 210px; background: var(--color-accent-subtle); border-radius: 52% 48% 42% 58%; border: 1px solid var(--color-border); padding: 26px; transform: rotate(3deg); }
+.treasury-mascot > svg { width: 130px; height: 130px; }
+.treasury-mascot span { font-size: .78rem; font-weight: 800; color: var(--color-accent-text); }
+.treasury-account,.treasury-section-title { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.treasury-account { padding: 26px; border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-bg-surface); }
+.treasury-account h2 { margin: 0 0 10px; }
+.treasury-account > div { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; min-width: 0; }
+.treasury-account h2 { width: 100%; }
+.treasury-notice { padding: 14px 18px; border-radius: 12px; background: var(--color-bg-sunken); font-size: .88rem; overflow-wrap: anywhere; }
+.treasury-error { background: var(--color-error-bg); color: var(--color-error-text); }
+.treasury-assets { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; margin: 24px 0 14px; }
+.treasury-asset { border: 1px solid var(--color-border); background: var(--color-bg-raised); padding: 22px; border-radius: 20px; box-shadow: var(--shadow-surface); min-width: 0; }
+.treasury-asset-symbol { display: flex; align-items: center; justify-content: space-between; color: var(--color-accent-text); font-size: .85rem; font-weight: 800; }
+.treasury-asset strong { display: block; margin: 17px 0 10px; font-size: 1.35rem; overflow-wrap: anywhere; }
+.treasury-asset small,.treasury-fee-grid small { color: var(--color-text-secondary); font-size: .78rem; }
+.treasury-section { margin-top: 40px; border-top: 1px solid var(--color-separator); padding-top: 34px; }
+.treasury-section h2 { margin: 6px 0 16px; }
+.treasury-section > p { color: var(--color-text-secondary); max-width: 950px; }
+.treasury-fee-split { display: grid; grid-template-columns: 3fr 2fr 2fr; gap: 2px; border-radius: 16px; overflow: hidden; margin: 14px 0; }
+.treasury-fee-split span { padding: 18px 22px; background: var(--color-bg-sunken); font-size: .85rem; }
+.treasury-fee-split span:first-child { background: var(--color-accent-subtle); }
+.treasury-fee-split b { display: block; font: 500 1.65rem Fredoka,sans-serif; margin-bottom: 3px; }
+.treasury-fee-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 24px 0 14px; }
+.treasury-fee-grid article { border: 1px solid var(--color-border); border-radius: 18px; padding: 24px; background: var(--color-bg-surface); }
+.treasury-fee-grid h3 { margin: 0 0 16px; font-size: 1.1rem; }
+.treasury-fee-grid dl { margin: 0 0 14px; }
+.treasury-fee-grid dl > div { display: flex; justify-content: space-between; gap: 16px; margin: 10px 0; font-size: .85rem; }
+.treasury-fee-grid dt { color: var(--color-text-secondary); }
+.treasury-fee-grid dd { margin: 0; text-align: right; font-weight: 700; overflow-wrap: anywhere; }
+.treasury-premint { border-radius: 22px; border: 1px solid var(--color-border); padding: 28px; background: var(--color-bg-sunken); }
+.premint-bar { display: grid; grid-template-columns: 3fr 3fr 4fr; gap: 3px; height: 14px; border-radius: 8px; overflow: hidden; margin: 25px 0 20px; }
+.premint-bar span:nth-child(1) { background: #d49b37; }.premint-bar span:nth-child(2) { background: #866333; }.premint-bar span:nth-child(3) { background: #7b8c5a; }
+.premint-values { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+.premint-values span,.premint-values strong { display: block; }.premint-values span { font-size: .83rem; color: var(--color-text-secondary); }.premint-values strong { margin-top: 4px; font-size: 1.2rem; }
+.treasury-empty { text-align: center; padding: 38px 20px; border: 1px dashed var(--color-border); border-radius: 20px; color: var(--color-text-secondary); }
+.treasury-empty h3 { color: var(--color-text-primary); }.treasury-empty p { max-width: 600px; margin-inline: auto; }
+.treasury-history-list article { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--color-separator); }
+.treasury-history-list article > div { min-width: 0; }.treasury-history-list small { display: block; margin-top: 4px; color: var(--color-text-secondary); }
+@media(max-width:1200px) { .main-nav { gap: 15px; }.header-inner { gap: 16px; } }
+@media(max-width:800px) { .treasury-assets { grid-template-columns: repeat(2,minmax(0,1fr)); }.treasury-hero { grid-template-columns: 1fr 150px; }.treasury-mascot { min-height: 150px; padding: 14px; }.treasury-mascot > svg { width: 90px; height: 90px; }.treasury-mascot span { font-size: .65rem; text-align: center; } }
+@media(max-width:600px) {
+  .site-footer { padding-bottom: 88px; }.floating-x { width: 46px; height: 46px; right: max(14px,env(safe-area-inset-right)); bottom: calc(max(14px,env(safe-area-inset-bottom)) + var(--social-lift,0px)); }
+  .treasury-hero { grid-template-columns: 1fr; gap: 12px; }.treasury-mascot { display: none; }.treasury-account { flex-direction: column; align-items: flex-start; padding: 18px; }.treasury-account .external { font-size: .8rem; }
+  .treasury-asset { padding: 16px; }.treasury-asset strong { font-size: 1.05rem; }.treasury-fee-grid { grid-template-columns: 1fr; }.treasury-fee-split { grid-template-columns: repeat(3,1fr); }.treasury-fee-split span { padding: 14px 10px; font-size: .75rem; }
+  .treasury-premint { padding: 20px; }.premint-values strong { font-size: .9rem; }.treasury-history-list article { flex-wrap: wrap; font-size: .85rem; }.treasury-section-title { align-items: flex-start; }.treasury-section-title > span { max-width: 110px; text-align: right; }
+}
+@media(prefers-reduced-motion:reduce) { .floating-x,.social-tooltip { transition: none; }.floating-x:hover { transform: none; } }

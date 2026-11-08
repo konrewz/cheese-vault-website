@@ -1,3 +1,5 @@
+> Current deployment evidence and update instructions: [DEPLOYMENT-UPDATE.md](DEPLOYMENT-UPDATE.md). The existing native Git deployment is now confirmed under project cheese-vault-website. The older setup alternatives below are historical; do not run a second publisher or change DNS for this update.
+
 # Deploy this exact frontend to the existing Pages project
 
 No deployment or domain connection is implied by these instructions. Verify the resulting commit, deployment URL, DNS and HTTPS after execution.

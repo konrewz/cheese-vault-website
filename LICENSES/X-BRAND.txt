@@ -1,0 +1,7 @@
+The X logo path in src/SocialLinks.tsx comes from the official X brand toolkit:
+https://about.x.com/en/who-we-are/brand-toolkit
+Asset downloaded 2026-11-08:
+https://cdn.sanity.io/files/kjy2lb0k/production/3bb3c110d1f6fc7c759ea7fafa18c4d7e21f380c.zip?dl=x-logo.zip
+File: logo.svg. Path geometry is unchanged; CSS supplies light/dark foreground color.
+X marks belong to their respective owner and are used solely to link the project's
+official profile, https://x.com/cheesevaultfun. No partnership or endorsement is claimed.

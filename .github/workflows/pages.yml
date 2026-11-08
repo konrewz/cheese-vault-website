@@ -1,4 +1,4 @@
-name: Validate and deploy Cheese Vault
+name: Validate Cheese Vault
 on:
   push:
     branches: [main]
@@ -6,11 +6,11 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: cheese-vault-v2-production
+  group: cheese-vault-website-validation
   cancel-in-progress: false
 jobs:
   frontend:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.playwright
     steps:
@@ -34,13 +34,4 @@ jobs:
             sleep 1
           done
           npm run test:browser
-      # Enable only after the existing Pages project's production branch is main
-      # and any old/wrong repository's automatic deployments have been disabled.
-      - name: Deploy the verified main commit to the existing Pages project
-        if: vars.CLOUDFLARE_DEPLOY_ENABLED == 'true' && github.ref == 'refs/heads/main'
-        uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          wranglerVersion: '4.158.0'
-          command: pages deploy dist --project-name=cheese-vault-v2 --branch=main --commit-hash=${{ github.sha }} --commit-dirty=false
+      # Native Cloudflare Pages Git integration owns deployment.

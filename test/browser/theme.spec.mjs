@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-const routes = ['home', 'farm', 'portfolio', 'how-to-play', 'proof'];
+const routes = ['home', 'farm', 'portfolio', 'treasury', 'how-to-play', 'proof'];
 const links = [
   'https://explorer.imd.fun/jobs/3c7de646-4d13-45f5-ba32-3c57c559d8e8',
   'https://explorer.imd.fun/jobs/8c2f3489-1625-4e4b-805e-66cabdde9fee',
@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
   await page.route('**/*', route => new URL(route.request().url()).hostname === '127.0.0.1' ? route.continue() : route.abort());
 });
 for (const width of [1440, 390, 320]) for (const theme of ['light', 'dark']) {
-  test(`${width}px ${theme}: five pages, navigation, wallet and proof`, async ({ page }) => {
+  test(`${width}px ${theme}: six pages, navigation, wallet and proof`, async ({ page }) => {
     await page.setViewportSize({ width, height: 950 });
     await page.emulateMedia({ colorScheme: theme });
     const errors = []; page.on('pageerror', error => errors.push(error.message));

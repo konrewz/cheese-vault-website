@@ -7,6 +7,7 @@ import { wagmiConfig } from "./wallet-config";
 import "./styles.css";
 import "./theme.css";
 import "./four-pools.css";
+import "./treasury.css";
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false, refetchOnWindowFocus: true } },
 });

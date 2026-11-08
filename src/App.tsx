@@ -1,4 +1,6 @@
 import { TvlSummary } from "./TvlSummary";
+import { Treasury } from "./Treasury";
+import { FloatingX, FooterX } from "./SocialLinks";
 import { AprBreakdown, ConversionModes, SqkPoolCard } from "./FourPools";
 import { ThemeToggle } from "./ThemeToggle";
 import { useEffect, useRef, useState } from "react";
@@ -54,11 +56,12 @@ import {
 import { saveTransaction, useHistory, type HistoryEntry } from "./history";
 import type { Action } from "./contracts/transactions";
 
-type Route = "home" | "farm" | "portfolio" | "how-to-play" | "proof";
+type Route = "home" | "farm" | "portfolio" | "treasury" | "how-to-play" | "proof";
 const nav = [
   { id: "home", name: "Home" },
   { id: "farm", name: "Cheese Farm" },
   { id: "portfolio", name: "My Portfolio" },
+  { id: "treasury", name: "Treasury" },
   { id: "how-to-play", name: "How to Play" },
   { id: "proof", name: "Swarm Proof" },
 ] as const;
@@ -140,6 +143,7 @@ export default function App() {
           <Portfolio manage={manage} openWallet={() => setWalletOpen(true)} />
         )}
         {route === "how-to-play" && <HowToPlay />}
+        {route === "treasury" && <Treasury />}
         {route === "proof" && <Proof />}
       </main>
       <footer className="site-footer">
@@ -152,6 +156,7 @@ export default function App() {
             A cozy corner of Ethereum Sepolia.
           </span>
           <div className="footer-links">
+            <FooterX />
             <a href="#/how-to-play">How it works</a>
             <External href={SOURCE_URL}>GitHub</External>
             <a href="#/proof">
@@ -169,6 +174,7 @@ export default function App() {
           </span>
         </div>
       </footer>
+      <FloatingX hidden={walletOpen || !!transaction} />
       {transaction && !walletOpen && (
         <TransactionModal
           pool={transaction.pool}

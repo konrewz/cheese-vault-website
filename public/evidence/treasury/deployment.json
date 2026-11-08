@@ -1,0 +1,75 @@
+{
+  "chainId": 11155111,
+  "sourceCommit": "69602c52b5d2edc4681c807a5b04517214d90241",
+  "contracts": {
+    "CheeseToken": {
+      "address": "0x33a41a4093b1aadcce2f9e0dda53211ed91c3521",
+      "transactionHash": "0x945b779227a9467fbe418f582613b96fff05b960dceda3048908a78fac227816",
+      "blockNumber": "12089810",
+      "blockHash": "0x2bda1a5e9b46442a963ccf08cd77d83fe7f8581f3cfcaa155bc9b5431faa2104",
+      "runtimeHash": "0xe29105be0078131fbc560dc67b5cecf5fde033375fdfbcd1460eefe68aa66e30"
+    },
+    "CheeseEmissionController": {
+      "address": "0xe06748177ad22d422e49cdb0982a5f932e46ee7d",
+      "transactionHash": "0x945b779227a9467fbe418f582613b96fff05b960dceda3048908a78fac227816",
+      "blockNumber": "12089810",
+      "blockHash": "0x2bda1a5e9b46442a963ccf08cd77d83fe7f8581f3cfcaa155bc9b5431faa2104",
+      "runtimeHash": "0x2c2514b6a86320bfd481cfa0b9d52e9699f683cac860f6b339f6c4bd7677619e"
+    },
+    "CheeseFarmERC20": {
+      "address": "0xd460157324fe20eeb83f8255aca5d2f09f387f21",
+      "transactionHash": "0x945b779227a9467fbe418f582613b96fff05b960dceda3048908a78fac227816",
+      "blockNumber": "12089810",
+      "blockHash": "0x2bda1a5e9b46442a963ccf08cd77d83fe7f8581f3cfcaa155bc9b5431faa2104",
+      "runtimeHash": "0xb86f10f8bce5c5140a31bb9667679d230809857ddd819fcd10d855d2cfbb5423"
+    },
+    "CheeseFarmETH": {
+      "address": "0x8ab46e3c9d16c4ca3ee8a28648c5809142c48faa",
+      "transactionHash": "0x945b779227a9467fbe418f582613b96fff05b960dceda3048908a78fac227816",
+      "blockNumber": "12089810",
+      "blockHash": "0x2bda1a5e9b46442a963ccf08cd77d83fe7f8581f3cfcaa155bc9b5431faa2104",
+      "runtimeHash": "0x222725653e048c76637c04e5f2e4c098133834ed6ce2e4158731c367dec8d7ca"
+    },
+    "CheeseFarmSIMD": {
+      "address": "0x222f1a83afc0e1abd9b37f004bed792e7c027d88",
+      "transactionHash": "0x945b779227a9467fbe418f582613b96fff05b960dceda3048908a78fac227816",
+      "blockNumber": "12089810",
+      "blockHash": "0x2bda1a5e9b46442a963ccf08cd77d83fe7f8581f3cfcaa155bc9b5431faa2104",
+      "runtimeHash": "0xbef451a0a9f227286808ea50b257c7eaf30801e1261fdede153a479b404f4aca"
+    }
+  },
+  "tokenConstructorEvents": [
+    {
+      "eventName": "Transfer",
+      "args": {
+        "from": "0x0000000000000000000000000000000000000000",
+        "to": "0xDEA11b3A70b77134424d436f6eb455f1Abbd4449",
+        "value": "63000000000000000000000000"
+      }
+    },
+    {
+      "eventName": "Transfer",
+      "args": {
+        "from": "0x0000000000000000000000000000000000000000",
+        "to": "0xDEA11b3A70b77134424d436f6eb455f1Abbd4449",
+        "value": "63000000000000000000000000"
+      }
+    },
+    {
+      "eventName": "Transfer",
+      "args": {
+        "from": "0x0000000000000000000000000000000000000000",
+        "to": "0xDEA11b3A70b77134424d436f6eb455f1Abbd4449",
+        "value": "84000000000000000000000000"
+      }
+    },
+    {
+      "eventName": "Preminted",
+      "args": {
+        "teamRecipient": "0xDEA11b3A70b77134424d436f6eb455f1Abbd4449",
+        "treasuryRecipient": "0xDEA11b3A70b77134424d436f6eb455f1Abbd4449",
+        "liquidityRecipient": "0xDEA11b3A70b77134424d436f6eb455f1Abbd4449"
+      }
+    }
+  ]
+}
