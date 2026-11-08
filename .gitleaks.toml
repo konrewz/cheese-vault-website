@@ -1,0 +1,12 @@
+title = "Cheese Vault frontend publication scan"
+[extend]
+useDefault = true
+
+# This exact, public SHA-256 is the unchanged CheeseToken ABI checksum.
+# Both the path and complete checksum must match; no file or rule is broadly excluded.
+[[allowlists]]
+description = "Published CheeseToken ABI SHA-256, not an API credential"
+condition = "AND"
+paths = ['''(^|/)official/provenance\.json$''']
+regexTarget = "secret"
+regexes = ['''^040f424b1e24d929c4bc7a5b5c7173622d6ccf325395452d7fa2a251e4298756$''']

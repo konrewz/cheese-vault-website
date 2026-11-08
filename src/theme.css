@@ -1,0 +1,94 @@
+/* Semantic colors apply to every route, native dialog, form and wallet menu. */
+:root { color-scheme: light; }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --cream-200: #3d3228;
+  --color-bg-page: #171411;
+  --color-bg-surface: #211c17;
+  --color-bg-sunken: #2c251e;
+  --color-bg-raised: #2a231c;
+  --color-text-primary: #f6ead4;
+  --color-text-secondary: #c0ad93;
+  --color-text-disabled: #aa9a85;
+  --color-text-inverse: #faf7ef;
+  --color-border: #61513f;
+  --color-separator: #3d3228;
+  --color-focus: #f0c878;
+  --color-accent-solid: #d8b56a;
+  --color-accent-solid-hover: #e4c47e;
+  --color-accent-subtle: #3a2d1b;
+  --color-accent-text: #e7c37a;
+  --color-success-bg: #223124;
+  --color-success-text: #a8c694;
+  --color-warning-bg: #392d1b;
+  --color-warning-text: #ecc785;
+  --color-error-bg: #3b2320;
+  --color-error-text: #f3afa0;
+  --shadow-surface: 0 0 0 1px rgb(246 234 212 / 6%), 0 8px 25px rgb(0 0 0 / 16%);
+  --shadow-hover: 0 12px 32px rgb(0 0 0 / 26%);
+}
+[data-theme="dark"] .button-primary { color: #302314; box-shadow: 0 2px 0 #8b6a32; }
+[data-theme="dark"] .button-wallet { background: #4d3926; }
+[data-theme="dark"] .button-wallet:hover { background: #63492f; }
+[data-theme="dark"] .modal::backdrop { background: rgb(0 0 0 / 72%); }
+/* Keep the original illustration's colors; present it as a warmly lit vignette. */
+[data-theme="dark"] .hero-image {
+  mix-blend-mode: normal;
+  mask-image: radial-gradient(ellipse 49% 48% at 50% 50%, #000 55%, transparent 100%);
+}
+.theme-toggle {
+  width: 44px; height: 44px; flex: 0 0 44px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--color-border); border-radius: 50%;
+  color: var(--color-accent-text); background: var(--color-bg-raised);
+  transition: background-color 180ms, border-color 180ms, transform 180ms;
+}
+.theme-toggle:hover { background: var(--color-accent-subtle); transform: rotate(-12deg); }
+.theme-toggle:focus-visible, .contract-details > summary:focus-visible {
+  outline: 2px solid var(--color-focus); outline-offset: 4px;
+}
+html, body, .site-header, .site-footer, .pool-card, .modal, .wallet-popover,
+.amount-input, .notice, .stat, .contract-row, .swarm-proof-card {
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+.swarm-proof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.swarm-proof-card.external {
+  display: flex; align-items: flex-start; gap: 20px; position: relative;
+  padding: 32px; border: 1px solid var(--color-border); border-radius: 24px;
+  background: var(--color-bg-surface); text-decoration: none;
+}
+.swarm-proof-card:hover { border-color: var(--color-accent-text); background: var(--color-accent-subtle); }
+.swarm-card-icon { color: var(--color-accent-text); background: var(--color-accent-subtle); padding: 14px; border-radius: 17px; display: flex; }
+.swarm-card-copy { display: flex; flex-direction: column; gap: 14px; min-width: 0; align-self: stretch; }
+.swarm-card-copy strong { font: 500 2rem/1.15 "Fredoka", sans-serif; color: var(--color-text-primary); }
+.swarm-card-copy > span:not(.swarm-card-cta) { color: var(--color-text-secondary); }
+.swarm-card-copy .swarm-eyebrow { font-size: .7rem; font-weight: 800; letter-spacing: .09em; }
+.swarm-card-cta { font-weight: 800; color: var(--color-accent-text); margin-top: auto; padding-top: 12px; }
+.swarm-proof-card > svg { flex: 0 0 20px; height: 20px; width: 20px; }
+.swarm-source-links { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; margin: 28px 0 52px; font-size: .875rem; }
+.swarm-source-links > span { color: var(--color-text-secondary); }
+.contract-details { border-top: 1px solid var(--color-border); }
+.contract-details > summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; min-height: 76px; font-weight: 800; gap: 16px; }
+.contract-details > summary::-webkit-details-marker { display: none; }
+.contract-details > summary > span { display: flex; align-items: center; gap: 12px; }
+.contract-details[open] > summary > svg { transform: rotate(90deg); }
+.contract-details-content { padding-top: 22px; }
+@media (max-width: 1100px) { .swarm-proof-card.external { flex-wrap: wrap; } .swarm-card-copy { flex: 1; min-width: 180px; } }
+@media (max-width: 640px) {
+  .swarm-proof-grid { grid-template-columns: 1fr; gap: 16px; }
+  .swarm-proof-card.external { padding: 24px; gap: 16px; }
+  .swarm-card-copy strong { font-size: 1.75rem; }
+  .header-actions { gap: 8px; }
+  .header-inner { column-gap: 8px; }
+  .swarm-source-links { margin-bottom: 32px; }
+}
+@media (max-width: 370px) {
+  .brand > svg { display: none; }
+  .button-wallet { padding-inline: 8px; gap: 5px; }
+  .header-actions { gap: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle, html, body, .site-header, .site-footer, .pool-card, .modal,
+  .wallet-popover, .amount-input, .notice, .stat, .contract-row, .swarm-proof-card { transition: none; }
+  .theme-toggle:hover { transform: none; }
+}

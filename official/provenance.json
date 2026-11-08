@@ -1,0 +1,13 @@
+{
+  "repository": "https://github.com/identity-md-launches/launch-3140-cheese-v2-official",
+  "commit": "69602c52b5d2edc4681c807a5b04517214d90241",
+  "retrievedAtUTC": "2026-11-08",
+  "abis": {
+    "CheeseFarmSIMD.json": "f01ebd22ff76a3b9723d00a81feff16eedca83197469589aafc18ba413a09f23",
+    "CheeseFarmETH.json": "fb7d3a2a70dcf818fe782b9d3508d216d4bbdfe8f7f45937541d7e0f57daeaa2",
+    "CheeseToken.json": "040f424b1e24d929c4bc7a5b5c7173622d6ccf325395452d7fa2a251e4298756",
+    "CheeseEmissionController.json": "8d7aa54f91da7f06770125ec640a721226f08135febf2651480e934970a1d694",
+    "CheeseFarmERC20.json": "2a922d4ce0d1a144780018bde4e73a6855ae4e82f7f0a9b438148b4870df7feb"
+  },
+  "note": "Unmodified public ABIs from web/abi; Solidity references from src/. Deployment source verification is a separate explorer check, unavailable during this run."
+}

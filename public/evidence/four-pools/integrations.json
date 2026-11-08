@@ -1,0 +1,102 @@
+{
+  "checkedAt": "2026-11-08T13:54:39.659Z",
+  "chainId": 11155111,
+  "blockNumber": "12090992",
+  "providers": [
+    "https://ethereum-sepolia-rpc.publicnode.com",
+    "https://rpc.sepolia.ethpandaops.io"
+  ],
+  "sourceCommit": "69602c52b5d2edc4681c807a5b04517214d90241",
+  "controllerState": {
+    "owner": "0xDEA11b3A70b77134424d436f6eb455f1Abbd4449",
+    "poolCount": "0",
+    "totalWeight": 0,
+    "activeWeight": 0,
+    "getAllocation": [
+      0,
+      0,
+      1000
+    ],
+    "activated": false
+  },
+  "poolStates": [
+    {
+      "name": "CHEESE",
+      "address": "0xd460157324fe20eeb83f8255aca5d2f09f387f21",
+      "totalAssets": "0",
+      "totalShares": "0",
+      "registered": false,
+      "asset": "0x33A41a4093B1aADcCE2f9E0dDa53211ed91c3521"
+    },
+    {
+      "name": "ETH",
+      "address": "0x8ab46e3c9d16c4ca3ee8a28648c5809142c48faa",
+      "totalAssets": "0",
+      "totalShares": "0",
+      "registered": false,
+      "asset": null
+    },
+    {
+      "name": "sIMD",
+      "address": "0x222f1a83afc0e1abd9b37f004bed792e7c027d88",
+      "totalAssets": "0",
+      "totalShares": "0",
+      "registered": false,
+      "asset": "0x0000000000000000000000000000000000000000"
+    }
+  ],
+  "blockHash": "0xb4d860767921bdf6bb56cdf6cdac82f8bb72c038d1db7889de440a5dc5faa664",
+  "sqk": {
+    "address": "0xd78a3956cf63164d1fa1c622ad3c66623162fa1e",
+    "runtimeHash": "0x6d6ea1d4143a02637e905d4d923b48f78f81f46aa1169f5004f5a150a2433329",
+    "name": "Squeek",
+    "symbol": "SQK",
+    "decimals": 18,
+    "totalSupply": "221776834150943954457242998",
+    "totalMinted": "221776999093535297057799194",
+    "mining": "0x2dCcB11fcC2dEfdd188555e45aCb52231e82e218",
+    "zeroTransferReturns": true
+  },
+  "candidates": {
+    "imd": {
+      "address": "0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7",
+      "hasSepoliaCode": false,
+      "status": "MAINNET_REFERENCE_NOT_APPROVED_FOR_SEPOLIA"
+    },
+    "simd": {
+      "address": "0x9efa934d9fad4ae28c998a40195646b965a97247",
+      "hasSepoliaCode": false,
+      "status": "MAINNET_REFERENCE_NOT_APPROVED_FOR_SEPOLIA"
+    }
+  },
+  "imdTest": {
+    "address": "0x56bcf2a5f47710649a4091219ef0b56e2d1b58bf",
+    "name": "Identity.md Test",
+    "symbol": "imdTEST",
+    "decimals": 18,
+    "useForConversion": false
+  },
+  "simdAsset": "0x0000000000000000000000000000000000000000",
+  "depositForAvailable": false,
+  "sqkFarm": {
+    "address": null,
+    "status": "NOT_DEPLOYED",
+    "targetPoints": 200
+  },
+  "conversion": {
+    "status": "BLOCKED_UNVERIFIED_SEPOLIA_VAULT",
+    "imd": null,
+    "simd": null,
+    "rate": null,
+    "fees": null,
+    "reverseSupported": null,
+    "atomicDepositFor": false,
+    "flow": "Two wallet-originated operations (conversion then farm deposit), plus ERC20 approvals when needed. Not enabled without verified Sepolia converter."
+  },
+  "sources": [
+    "https://docs.squeekchain.com/assets/deployments/sepolia.json",
+    "https://pool4.imd.fun/docs",
+    "https://imd.fun/docs/"
+  ],
+  "transactionsSent": 0
+}

@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.npm-cache/
+.playwright/
+.cache/
+.wrangler/
+qa/
+test-results/
+playwright-report/
+test/scratch/
+.env
+.env.*
+*.pem
+*.key
+*keystore*
+*.tsbuildinfo

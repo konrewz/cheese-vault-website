@@ -1,0 +1,46 @@
+name: Validate and deploy Cheese Vault
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cheese-vault-v2-production
+  cancel-in-progress: false
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.playwright
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run check:contracts
+      - run: npm run build
+      - run: npm run check:export
+      - run: npx playwright install --with-deps chromium
+      - name: Browser regression tests (mocked network, no signing)
+        run: |
+          npm run preview > /tmp/cheese-vault-preview.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:5174/ > /dev/null; then break; fi
+            sleep 1
+          done
+          npm run test:browser
+      # Enable only after the existing Pages project's production branch is main
+      # and any old/wrong repository's automatic deployments have been disabled.
+      - name: Deploy the verified main commit to the existing Pages project
+        if: vars.CLOUDFLARE_DEPLOY_ENABLED == 'true' && github.ref == 'refs/heads/main'
+        uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: '4.158.0'
+          command: pages deploy dist --project-name=cheese-vault-v2 --branch=main --commit-hash=${{ github.sha }} --commit-dirty=false

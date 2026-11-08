@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#faf7ef" />
+    <script id="theme-bootstrap">
+      (() => {
+        let saved;
+        try { saved = localStorage.getItem("cheese-vault:theme"); } catch {}
+        const theme = saved === "light" || saved === "dark" ? saved
+          : window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        document.querySelector('meta[name="theme-color"]').content = theme === "dark" ? "#171411" : "#faf7ef";
+      })();
+    </script>
+    <title>The Cheese Vault · Stake Your Cheese</title>
+    <meta
+      name="description"
+      content="Stake Your Cheese. Let the Hamsters Work. A cozy Web3 farming dApp on Ethereum Sepolia with real contracts, transparent fees and a 15% Hamster Bite."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="The Cheese Vault · Small paws. Big cheese."
+    />
+    <meta
+      property="og:description"
+      content="A cozy corner of Ethereum Sepolia. Explore three farms, collect CHEESE and meet the Hamster Bite."
+    />
+    <meta property="og:image" content="./art/vault-hero.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link
+      rel="preload"
+      href="./fonts/fredoka.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="./fonts/nunito.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript
+      >The Cheese Vault needs JavaScript to read Sepolia contracts and connect a
+      wallet. Official source:
+      https://github.com/identity-md-launches/launch-3140-cheese-v2-official</noscript
+    >
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
