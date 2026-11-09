@@ -91,6 +91,12 @@ vi.mock("../../src/hooks", () => ({
   useCheeseBalance: () => ({ data: 1234n * 10n ** 18n }),
 }));
 import App from "../../src/App";
+// Keep the original five-contract proof fixture independent of deployed extension
+// reads. Live extension readiness and wallet flows have dedicated tests.
+vi.mock("../../src/contracts/integrations", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../src/contracts/integrations")>();
+  return {...actual, SQK_FARM: undefined, EXTENSIONS: {...actual.EXTENSIONS, wrapper: null, sqkFarm: null}};
+});
 import { TransactionModal } from "../../src/TransactionModal";
 import { WalletControl, WalletSheet } from "../../src/wallet";
 const hash = `0x${"ab".repeat(32)}` as const;
@@ -312,7 +318,7 @@ describe("transaction interactions with explicit fixtures, not real chain transa
         openWallet={vi.fn()}
       />,
     );
-    expect(screen.getByText(/real sIMD asset/)).toBeInTheDocument();
+    expect(screen.getByText(/verified test sIMD wrapper/)).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Review deposit" }),
     ).toBeDisabled();

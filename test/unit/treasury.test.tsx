@@ -99,3 +99,6 @@ describe('Official X links',()=>{
   });
   it('hides the floating control while a wallet or transaction dialog is open',()=>{render(<FloatingX hidden/>);expect(screen.queryByRole('link')).not.toBeInTheDocument();});
 });
+
+// Explicit unconfigured-extension fixture: independent of future verified deployment addresses.
+vi.mock("../../src/contracts/integrations", async (importOriginal) => { const actual = await importOriginal<typeof import("../../src/contracts/integrations")>(); return {...actual, SQK_FARM:undefined, EXTENSIONS:{...actual.EXTENSIONS,wrapper:null,sqkFarm:null}}; });

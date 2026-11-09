@@ -11,6 +11,7 @@ import controllerJson from "./abi/CheeseEmissionController.json";
 import erc20Json from "./abi/CheeseFarmERC20.json";
 import ethJson from "./abi/CheeseFarmETH.json";
 import simdJson from "./abi/CheeseFarmSIMD.json";
+import { EXTENSIONS } from './integrations';
 
 export const CHAIN = sepolia;
 export const SITE_NAME = "The Cheese Vault";
@@ -24,7 +25,7 @@ export const CONTROLLER: Address = "0xe06748177ad22d422e49cdb0982a5f932e46ee7d";
 export const tokenAbi = tokenJson as Abi;
 export const controllerAbi = controllerJson as Abi;
 export const farmAbi = erc20Json as Abi;
-export type PoolId = "cheese" | "eth" | "simd";
+export type PoolId = "cheese" | "eth" | "simd" | "sqk";
 export type Pool = {
   id: PoolId;
   name: string;
@@ -63,8 +64,14 @@ export const POOLS: readonly Pool[] = [
     description: "A little teamwork. A little more cheese.",
   },
 ];
+export const SQK_POOL: Pool | undefined = EXTENSIONS.sqkFarm ? {
+  id: 'sqk', name: 'SQK Pool', symbol: 'SQK', address: EXTENSIONS.sqkFarm.address,
+  abi: erc20Json as Abi, initialPoints: 200, description: 'Put your Squeek to work. Earn CHEESE.'
+} : undefined;
+export const ALL_POOLS: readonly Pool[] = [...POOLS, ...(SQK_POOL ? [SQK_POOL] : [])];
 export const RPC_URLS = [
   "https://ethereum-sepolia-rpc.publicnode.com",
+  "https://rpc.sepolia.ethpandaops.io",
   "https://sepolia.drpc.org",
   "https://ethereum-sepolia.publicnode.com",
 ];

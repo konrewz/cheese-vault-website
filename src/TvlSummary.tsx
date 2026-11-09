@@ -1,4 +1,4 @@
-import { POOLS, addressUrl, type Pool } from "./contracts/config";
+import { ALL_POOLS as POOLS, SQK_POOL, addressUrl, type Pool } from "./contracts/config";
 import { usePool, useProtocol } from "./hooks";
 import { Amount, External } from "./components";
 
@@ -21,7 +21,7 @@ export function TvlSummary() {
     <div className="tvl-heading"><div><h2>Cheese tucked away.</h2><p>See what is deposited in each pool.</p></div>
       <div className="tvl-usd"><span>USD TVL</span><strong>Unavailable</strong><small>Reliable Sepolia asset prices are unavailable.</small></div></div>
     <div className="tvl-assets">{POOLS.map(pool => <PoolValue key={pool.id} pool={pool} />)}
-      <div className="tvl-asset"><span>SQK Pool</span><strong>Unavailable</strong><small>Farm not deployed</small></div>
+      {!SQK_POOL && <div className="tvl-asset"><span>SQK Pool</span><strong>Unavailable</strong><small>Farm not deployed</small></div>}
     </div>
     <p className="small muted">Balances are kept in their own asset units. These are on-chain deposited assets, excluding separate CHEESE rewards, unpaid Treasury fees and unassigned donations. They are not added together as a dollar total.</p>
   </section>;

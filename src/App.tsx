@@ -40,6 +40,7 @@ import {
   CONTROLLER,
   JOB_URL,
   POOLS,
+  SQK_POOL,
   publicClient,
   SOURCE_URL,
   TOKEN,
@@ -48,13 +49,15 @@ import {
   type Pool,
 } from "./contracts/config";
 import { compactAmount, displayAmount } from "./contracts/math";
-import { depositBlockReason, earnsRewards } from "./contracts/read";
+import { depositBlockReason, earnsRewards, loadPool } from "./contracts/read";
 import {
   loadSourceVerification,
   sourceEvidenceUrl,
 } from "./contracts/verification";
 import { saveTransaction, useHistory, type HistoryEntry } from "./history";
 import type { Action } from "./contracts/transactions";
+import { EXTENSIONS } from './contracts/integrations';
+import { verifyExtension } from './contracts/conversion';
 
 type Route = "home" | "farm" | "portfolio" | "treasury" | "how-to-play" | "proof";
 const nav = [
@@ -408,7 +411,7 @@ function Home({ manage }: { manage: Manage }) {
           {POOLS.map((pool) => (
             <PoolCard key={pool.id} pool={pool} compact manage={manage} />
           ))}
-          <SqkPoolCard compact />
+          {SQK_POOL ? <PoolCard pool={SQK_POOL} compact manage={manage} /> : <SqkPoolCard compact />}
         </div>
       </section>
       <section className="bite-banner content-width">
@@ -451,6 +454,7 @@ function PoolCard({
   const data = state.data;
   const unavailable = state.isError || protocol.isError;
   const coming = !!data && !data.assetConfigured;
+  const extensionBlocked = (pool.id === 'simd' || pool.id === 'sqk') && (!data?.assetVerified || !data.registered);
   const earning = earnsRewards(data, protocol.data);
   const reason = depositBlockReason(data, protocol.data);
   const status = coming
@@ -460,7 +464,7 @@ function PoolCard({
       : !data || !protocol.data
         ? "Checking status"
         : earning
-          ? "Earning CHEESE"
+          ? "Ready for rewards"
           : data.depositsPaused || protocol.data.paused
             ? "Deposits paused"
             : "Not earning yet";
@@ -492,7 +496,7 @@ function PoolCard({
       </dl>
       <p className="small muted">Target allocation: {pool.initialPoints / 10}%</p>
       <AprBreakdown />
-      {pool.id === "simd" && !compact && <ConversionModes onModeChange={setConversionMode} />}
+      {pool.id === "simd" && !compact && <ConversionModes onModeChange={setConversionMode} onDeposit={() => {setConversionMode("simd");manage(pool,"deposit");}} />}
       {!compact && (
         <>
           <div className="pool-divider" />
@@ -555,22 +559,24 @@ function PoolCard({
       <div className="pool-actions">
         <button
           className="button button-pool"
-          disabled={conversionMode === "imd" || coming || (!!data && !!protocol.data && !!reason)}
+          disabled={conversionMode === "imd" || coming || extensionBlocked || (!!data && !!protocol.data && !!reason)}
           onClick={() => manage(pool, "deposit")}
         >
-          {conversionMode === "imd" ? "Conversion unavailable" : coming ? "Coming soon" : compact ? "Explore pool" : "Deposit"}
+          {conversionMode === "imd" ? (EXTENSIONS.wrapper ? "Use conversion steps above" : "Conversion unavailable") : coming ? "Coming soon" : compact ? "Explore pool" : "Deposit"}
           {!coming && <ArrowRight size={17} />}
         </button>
         {!compact && (
           <div className="secondary-pool-actions">
             <button
               className="button button-quiet"
+              disabled={extensionBlocked}
               onClick={() => manage(pool, "withdraw")}
             >
               Withdraw
             </button>
             <button
               className="button button-quiet"
+              disabled={extensionBlocked}
               onClick={() => manage(pool, "claim")}
             >
               Claim
@@ -627,7 +633,7 @@ function Farm({ manage }: { manage: Manage }) {
         <Notice tone="warning">
           Emissions have not been activated. CHEESE and ETH deposits may still
           succeed, but will not earn CHEESE until setup and activation are
-          complete. sIMD deposits open only when the real asset is configured.
+          complete. sIMD deposits open only after the test wrapper is verified and configured.
         </Notice>
       )}
       {q.isError && (
@@ -647,7 +653,7 @@ function Farm({ manage }: { manage: Manage }) {
         {POOLS.map((pool) => (
           <PoolCard key={pool.id} pool={pool} manage={manage} />
         ))}
-        <SqkPoolCard />
+        {SQK_POOL ? <PoolCard pool={SQK_POOL} manage={manage} /> : <SqkPoolCard />}
       </div>
       <div className="farm-facts">
         <div>
@@ -674,6 +680,10 @@ function Farm({ manage }: { manage: Manage }) {
     </div>
   );
 }
+function SqkAllocation() {
+  const q = useQuery({queryKey:["pool","sqk"],queryFn:()=>loadPool(SQK_POOL!),enabled:!!SQK_POOL,refetchInterval:30000,retry:false});
+  return <div className="allocation-row allocation-sqk"><Sprout size={22}/><span>SQK</span><span className="allocation-track"><span style={{width:q.data?.registered?`${(q.data.weight??0)/10}%`:"0%"}}/></span><strong>{!SQK_POOL?"Not registered":q.isError?"Unavailable":q.data?.registered?`${(q.data.weight??0)/10}%`:"Registration pending"}</strong><span className="small muted">Target 20%</span></div>;
+}
 function Allocation() {
   const protocol = useProtocol();
   const a = usePool(POOLS[0]);
@@ -687,7 +697,7 @@ function Allocation() {
         <h2>A slice for every burrow.</h2>
         <p className="muted">
           Target allocation: CHEESE 40%, ETH 20%, sIMD 20%, SQK 20%.
-          SQK replaces the former reserve in the target plan. Current on-chain weights remain unchanged until Owner configuration.
+          The values below come from current on-chain configuration. Unassigned points do not earn rewards.
         </p>
       </div>
       <div className="allocation-bars">
@@ -721,11 +731,7 @@ function Allocation() {
             </span>
           </div>
         ))}
-        <div className="allocation-row allocation-sqk">
-          <Sprout size={22} /><span>SQK</span>
-          <span className="allocation-track"><span style={{ width: "0%" }} /></span>
-          <strong>Not registered</strong><span className="small muted">Target 20%</span>
-        </div>
+        <SqkAllocation />
         <p className="small muted">Unassigned on-chain points: {p ? `${p.allocation[2]} / ${p.totalPoints}` : "Unavailable"}. These are not active SQK rewards.</p>
       </div>
     </section>
@@ -759,7 +765,7 @@ function Portfolio({
             <ArrowRight size={17} />
           </button>
         </section>
-        <div className="pool-grid farm-grid">{POOLS.map(pool => <PoolCard key={pool.id} pool={pool} manage={manage} />)}<SqkPoolCard /></div>
+        <div className="pool-grid farm-grid">{POOLS.map(pool => <PoolCard key={pool.id} pool={pool} manage={manage} />)}{SQK_POOL ? <PoolCard pool={SQK_POOL} manage={manage} /> : <SqkPoolCard />}</div>
         </>
       ) : (
         <>
@@ -799,7 +805,7 @@ function Portfolio({
             {POOLS.map((pool) => (
               <PortfolioPosition pool={pool} key={pool.id} manage={manage} />
             ))}
-            <SqkPoolCard />
+            {SQK_POOL ? <PoolCard pool={SQK_POOL} manage={manage} /> : <SqkPoolCard />}
           </div>
           <TransactionHistory account={address} />
         </>
@@ -811,6 +817,7 @@ function PortfolioPosition({ pool, manage }: { pool: Pool; manage: Manage }) {
   const state = usePool(pool);
   const q = usePosition(pool);
   const p = q.data;
+  const extensionBlocked = (pool.id === "simd" || pool.id === "sqk") && (!state.data?.assetVerified || !state.data.registered);
   const symbol = state.data?.assetSymbol ?? pool.symbol;
   return (
     <article className="portfolio-position">
@@ -867,7 +874,7 @@ function PortfolioPosition({ pool, manage }: { pool: Pool; manage: Manage }) {
       <div className="position-actions">
         <button
           className="button button-pool"
-          disabled={!!state.data && !state.data.assetConfigured}
+          disabled={extensionBlocked || (!!state.data && !state.data.assetConfigured)}
           onClick={() => manage(pool, "deposit")}
         >
           Deposit
@@ -875,12 +882,14 @@ function PortfolioPosition({ pool, manage }: { pool: Pool; manage: Manage }) {
         </button>
         <button
           className="button button-quiet"
+          disabled={extensionBlocked}
           onClick={() => manage(pool, "withdraw")}
         >
           Withdraw
         </button>
         <button
           className="button button-quiet"
+          disabled={extensionBlocked}
           onClick={() => manage(pool, "claim")}
         >
           Claim
@@ -999,7 +1008,7 @@ function HowToPlay() {
       <div className="step-top"><span className="step-icon">{step.icon}</span><span className="step-number">0{index + 1}</span></div>
       <h2>{step.title}</h2><p>{step.text}</p>{index < 3 && <ChevronRight className="step-arrow" size={19} />}
     </article>)}</div>
-    <p className="how-readiness">Use Ethereum Sepolia. Rewards start only when the pools are ready and emissions are active. SQK is Coming Soon; sIMD and IMD conversion are waiting for verified setup. Check Cheese Farm for each pool's current status.</p>
+    <p className="how-readiness">Use Ethereum Sepolia. Rewards require active emissions and new certified Squeek Blocks. Check Cheese Farm for each pool's live status; activation alone does not guarantee new rewards.</p>
     <section className="how-earn">
       <h2>Two Ways to Earn</h2>
       <div className="how-earn-grid">
@@ -1024,11 +1033,19 @@ function HowToPlay() {
       </section>
     </div>
     <section className="how-extra"><h2>A little help along the way.</h2>
-      <p>Already have sIMD? Choose Deposit sIMD. Deposit IMD (Auto Convert) will stay unavailable until the official Sepolia conversion service is verified. No exchange rate is assumed.</p>
+      <p>Already have test sIMD? Choose Deposit sIMD. Deposit IMD (Auto Convert) uses our verified Sepolia test wrapper: wrap IMD in your wallet, then deposit sIMD in a separate transaction. One IMD backs one test sIMD, with no conversion fee. Approvals and network gas apply. This is not official production sIMD.</p>
       <p>Hover over or tap Total APR to see the two ways to earn. N/A means there is not enough reliable information to show a rate. Returns are not guaranteed.</p>
     </section>
     <div className="how-cta"><h2>Your burrow is waiting.</h2><a className="button button-primary" href="#/farm">Explore Cheese Farm<ArrowRight size={16} /></a></div>
   </div>;
+}
+function ExtensionProof() {
+  const query = useQuery({queryKey:['extension-proof'],queryFn:async()=>{
+    const verified: string[]=[];
+    for(const ext of [EXTENSIONS.wrapper,EXTENSIONS.sqkFarm]) if(ext) {await verifyExtension(ext.address);verified.push(ext.address);}
+    return verified;
+  },retry:false,refetchInterval:30000});
+  return <section className="treasury-notice"><h3>Sepolia test extensions</h3><p>Separate test-only additions; not part of the original Swarm deployment or an official production sIMD protocol.</p>{[['Test sIMD wrapper',EXTENSIONS.wrapper],['SQK Farm',EXTENSIONS.sqkFarm]].map(([name,raw])=>{const ext=raw as typeof EXTENSIONS.wrapper;return <p key={name as string}><strong>{name as string}: </strong>{ext?<><External href={addressUrl(ext.address)}>{ext.address}</External>{' '}{query.isError?'Verification unavailable':query.data?.includes(ext.address)?'Exact packaged runtime verified; farm configuration is checked separately.':'Checking bytecode…'}</>:'Not deployed in this release.'}</p>;})}</section>;
 }
 function Proof() {
   const q = useProtocol();
@@ -1090,6 +1107,7 @@ function Proof() {
       <details className="contract-details">
         <summary><span><ShieldCheck size={21} /> Contract Details</span><ChevronRight size={20} /></summary>
         <div className="contract-details-content">
+      <ExtensionProof />
       <div className="section-heading">
         <div>
           <h2>The contracts behind the cozy.</h2>

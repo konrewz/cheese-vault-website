@@ -1,0 +1,18 @@
+{
+  "chainId": 11155111,
+  "testnetOnly": true,
+  "imd": "0x44a1cd38474fb1748400e7deb5f8d786cce3f89a",
+  "imdRuntimeHash": "0x3538eb43c63a76f91479ff1b5074d9cf2adbd6584813c1acce73435980d5870a",
+  "wrapper": {
+    "address": "0xcb93f154d9ab512753964c49ad8be507ecec677f",
+    "runtimeHash": "0x41dff2a4c1ca6b0b1b33adc2d92866894da0c9c3a48755d845fb6405edfe0428",
+    "deploymentTx": "0xd4da5913afce49283d8c7458e986247380f67a14958ddc5b7ac6e2fb4a1aba1b",
+    "blockNumber": "12095500"
+  },
+  "sqkFarm": {
+    "address": "0x247a2dabba2b4f5e97d8f5f9a12c9e17b1c1b920",
+    "runtimeHash": "0xf69c88289f069a0b68f994539143fb34a03795915c582dca14321da2e3ca920d",
+    "deploymentTx": "0xa524546816482862813c7a21a4b01b86ab893d5f68df6147cbbe731aaf4e6ee8",
+    "blockNumber": "12095505"
+  }
+}

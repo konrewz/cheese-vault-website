@@ -15,7 +15,7 @@ for (const width of [1440, 390, 320]) for (const theme of ['light', 'dark']) {
         await expect(page.locator('.tvl-usd')).toContainText('Unavailable');
         await expect(page.locator('.tvl-asset')).toHaveCount(4);
       }
-      for (const action of ['Deposit','Withdraw','Claim','MAX'])
+      for (const action of (route === 'home' ? ['Explore pool'] : ['Deposit','Withdraw','Claim']))
         await expect(page.locator('.pool-sqk').getByRole('button',{name:action,exact:true})).toBeDisabled();
     }
     await page.locator('.main-nav a[href="#/farm"]').click();
@@ -23,9 +23,9 @@ for (const width of [1440, 390, 320]) for (const theme of ['light', 'dark']) {
     await (width < 640 ? apr.tap() : apr.click()); await expect(page.locator('.pool-sqk [role="tooltip"]')).toBeVisible();
     await (width < 640 ? apr.tap() : apr.click()); await expect(page.locator('.pool-sqk [role="tooltip"]')).not.toBeVisible();
     await page.getByRole('button',{name:'Deposit IMD (Auto Convert)',exact:true}).click();
-    await expect(page.getByRole('button',{name:'Convert IMD and deposit'})).toBeDisabled();
-    await expect(page.getByRole('button',{name:'Conversion unavailable',exact:true})).toBeDisabled();
-    await expect(page.getByLabel('IMD amount')).toBeDisabled();
+    await expect(page.getByRole('button',{name:'Review next transaction'})).toBeDisabled();
+    await expect(page.getByRole('button',{name:'Use conversion steps above',exact:true})).toBeDisabled();
+    await expect(page.locator('.conversion-status')).toContainText('Verification unavailable');
     expect(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({path:`qa/screenshots/four-pools-${width}-${theme}.png`,fullPage:true});
     await page.locator('.main-nav a[href="#/how-to-play"]').click();

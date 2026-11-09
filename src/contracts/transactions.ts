@@ -1,6 +1,8 @@
 import { erc20Abi, type Address, type Abi } from "viem";
 import { publicClient, type Pool } from "./config";
 import type { PoolState } from "./read";
+import { EXTENSIONS, IMD_TOKEN } from './integrations';
+import { verifyExtension } from './conversion';
 
 export type Action = "deposit" | "withdraw" | "claim";
 export type TransactionKind = Action | "approve";
@@ -61,6 +63,9 @@ export async function prepareTransaction(
   call: TransactionCall,
   account: Address,
 ) {
+  const extension = [EXTENSIONS.wrapper, EXTENSIONS.sqkFarm].find(x => x?.address.toLowerCase() === call.address.toLowerCase());
+  if (extension) await verifyExtension(extension.address);
+  if (call.address.toLowerCase() === IMD_TOKEN && EXTENSIONS.wrapper) await verifyExtension(EXTENSIONS.wrapper.address);
   const request = { ...call, account };
   const simulation = await publicClient.simulateContract(request);
   if (call.functionName === "approve" && simulation.result === false)

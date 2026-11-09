@@ -29,7 +29,7 @@ export function Coin({
         <path d="m18 33 14-6v14Z" fill="#a392bd" />
       </svg>
     );
-  if (kind === "simd")
+  if (kind === "simd" || kind === "sqk")
     return (
       <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true">
         <circle cx="32" cy="32" r="31" fill="#e5ead9" />

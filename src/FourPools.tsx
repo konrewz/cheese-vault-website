@@ -5,7 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { erc20Abi } from "viem";
 import { Amount, Badge, External } from "./components";
 import { addressUrl, publicClient } from "./contracts/config";
-import { SQK_TOKEN, SQK_DECIMALS, CONVERSION } from "./contracts/integrations";
+import { SQK_TOKEN, SQK_DECIMALS, CONVERSION, EXTENSIONS } from "./contracts/integrations";
+import { ConversionPanel } from './ConversionPanel';
 import { formatApr, totalApr, LIVE_APR } from "./contracts/apr";
 
 export function AprBreakdown() {
@@ -30,7 +31,7 @@ export function AprBreakdown() {
   </div>;
 }
 
-export function ConversionModes({ onModeChange }: { onModeChange?: (mode: "simd" | "imd") => void }) {
+export function ConversionModes({ onModeChange, onDeposit }: { onModeChange?: (mode: "simd" | "imd") => void; onDeposit?: () => void }) {
   const [mode, setMode] = useState<"simd" | "imd">("simd");
   const id = useId();
   return <section className="conversion-modes" aria-label="sIMD deposit mode">
@@ -38,15 +39,16 @@ export function ConversionModes({ onModeChange }: { onModeChange?: (mode: "simd"
       <button type="button" aria-pressed={mode === "simd"} onClick={() => { setMode("simd"); onModeChange?.("simd"); }}>Deposit sIMD</button>
       <button type="button" aria-pressed={mode === "imd"} onClick={() => { setMode("imd"); onModeChange?.("imd"); }}>Deposit IMD (Auto Convert)</button>
     </div>
-    {mode === "imd" ? <div className="conversion-status">
+    {EXTENSIONS.wrapper ? <ConversionPanel onDeposit={onDeposit}/> : mode === "imd" ? <div className="conversion-status">
       <Badge tone="warning">Conversion unavailable</Badge>
       <label htmlFor={id}>IMD amount</label><input id={id} inputMode="decimal" placeholder="Unavailable until verified" disabled />
       <dl><div><dt>Conversion rate</dt><dd>N/A</dd></div><div><dt>Minimum sIMD output</dt><dd>N/A</dd></div>
         <div><dt>Conversion fees</dt><dd>N/A</dd></div><div><dt>Transaction status</dt><dd>Not started</dd></div></dl>
-      <p>{CONVERSION.status} No 1:1 rate is assumed.</p>
+      <p>{CONVERSION.status} No 1:1 rate is assumed for official sIMD. The new test wrapper is designed for exact 1:1 conversion, pending deployment.</p>
       <p>This farm credits the caller, so an adapter cannot deposit for your wallet. A verified converter would require wallet conversion, then a separate farm deposit, plus approvals when needed.</p>
       <button type="button" className="button button-quiet" disabled>Convert IMD and deposit</button>
-      <External href="https://pool4.imd.fun/docs">Official conversion documentation</External>
+      <button type="button" className="button button-quiet" disabled>Redeem test sIMD to IMD</button>
+      <External href={addressUrl(EXTENSIONS.imd)}>Verified test IMD token</External>
     </div> : <p className="small muted">Deposit sIMD directly once the Owner configures the verified Sepolia asset. Withdrawals return sIMD.</p>}
   </section>;
 }

@@ -10,6 +10,8 @@ import {
   type PoolId,
 } from "./config";
 import type { WithdrawalQuote } from "./math";
+import { EXTENSIONS, SQK_TOKEN } from './integrations';
+import { verifyExtension } from './conversion';
 
 // Exact CoreState tuple from the official repository's src/interfaces/ISqueekCore.sol.
 const coreAbi = parseAbi([
@@ -182,6 +184,7 @@ export type PoolState = {
   totalShares: bigint;
   asset?: Address;
   assetConfigured: boolean;
+  assetVerified?: boolean;
   decimals?: number;
   assetSymbol: string;
   poolId?: bigint;
@@ -210,6 +213,13 @@ export async function loadPool(pool: Pool): Promise<PoolState> {
   ]);
   const assetConfigured =
     pool.id === "eth" || (asset !== undefined && asset !== zeroAddress);
+  let assetVerified = pool.id !== 'simd' && pool.id !== 'sqk';
+  if (pool.id === 'simd' && asset && EXTENSIONS.wrapper && asset.toLowerCase() === EXTENSIONS.wrapper.address.toLowerCase()) {
+    await verifyExtension(asset); assetVerified = true;
+  }
+  if (pool.id === 'sqk' && asset?.toLowerCase() === SQK_TOKEN) {
+    await verifyExtension(pool.address); assetVerified = true;
+  }
   let decimals: number | undefined = pool.id === "eth" ? 18 : undefined;
   let assetSymbol = pool.symbol;
   if (assetConfigured && asset) {
@@ -242,6 +252,7 @@ export async function loadPool(pool: Pool): Promise<PoolState> {
     totalShares,
     asset,
     assetConfigured,
+    assetVerified,
     decimals,
     assetSymbol,
     poolId,
@@ -314,7 +325,11 @@ export function depositBlockReason(
   if (!state.controllerValid || !protocol.authorityValid)
     return "Contract bindings do not match the official deployment.";
   if (!state.assetConfigured)
-    return "Coming soon: the real sIMD asset has not been configured.";
+    return "Coming soon: the verified test sIMD wrapper has not been configured.";
+  if ((state.id === 'simd' || state.id === 'sqk') && !state.assetVerified)
+    return "Extension deployment and asset have not passed verification.";
+  if (state.id === 'sqk' && !state.registered)
+    return "SQK Farm registration is pending.";
   if (state.id === "cheese" && state.asset?.toLowerCase() !== TOKEN)
     return "The CHEESE farm asset does not match the official token.";
   if (state.decimals === undefined)

@@ -31,3 +31,6 @@ it("identifies a failed refresh when displaying previously read values", () => {
   fixture.failed = true; render(<TvlSummary />);
   expect(screen.getAllByText('Latest read failed')).toHaveLength(2);
 });
+
+// Explicit unconfigured-extension fixture: independent of future verified deployment addresses.
+vi.mock("../../src/contracts/integrations", async (importOriginal) => { const actual = await importOriginal<typeof import("../../src/contracts/integrations")>(); return {...actual, SQK_FARM:undefined, EXTENSIONS:{...actual.EXTENSIONS,wrapper:null,sqkFarm:null}}; });

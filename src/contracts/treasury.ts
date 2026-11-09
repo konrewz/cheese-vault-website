@@ -1,13 +1,13 @@
 import { decodeEventLog, erc20Abi, keccak256, parseAbi, zeroAddress, type Address, type Hash } from 'viem';
-import { CONTROLLER, POOLS, TOKEN, controllerAbi, publicClient, tokenAbi } from './config';
-import { SQK_TOKEN } from './integrations';
+import { CONTROLLER, ALL_POOLS as POOLS, TOKEN, controllerAbi, publicClient, tokenAbi } from './config';
+import { SQK_TOKEN, EXTENSIONS } from './integrations';
 import evidence from '../../public/evidence/treasury/deployment.json';
 
 export const INTENDED_TREASURY: Address = '0xdea11b3a70b77134424d436f6eb455f1abbd4449';
 export const DEPLOYMENT_BLOCK = BigInt(evidence.contracts.CheeseToken.blockNumber);
 export const DEPLOYMENT_TX = evidence.contracts.CheeseToken.transactionHash as Hash;
-// No canonical Sepolia sIMD is approved yet. A configured address alone is not identity verification.
-export const VERIFIED_SIMD: { address: Address; runtimeHash: Hash } | undefined = undefined;
+// This is the CHEESE test wrapper, not canonical production sIMD. Identity requires the verified deployment record.
+export const VERIFIED_SIMD: { address: Address; runtimeHash: Hash } | undefined = EXTENSIONS.wrapper ?? undefined;
 const SQK_RUNTIME = '0x6d6ea1d4143a02637e905d4d923b48f78f81f46aa1169f5004f5a150a2433329';
 const same = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
 export type AssetBalance = { symbol: string; balance?: bigint; decimals?: number; status: string };
@@ -68,7 +68,7 @@ export async function loadTreasurySnapshot(client: Client = publicClient): Promi
       client.readContract({ address: SQK_TOKEN, abi: erc20Abi, functionName: 'balanceOf', args: [INTENDED_TREASURY], blockNumber: at }),
       client.readContract({ address: SQK_TOKEN, abi: erc20Abi, functionName: 'decimals', blockNumber: at }),
     ]);
-    balances.push({ symbol: 'SQK', balance, decimals, status: 'Official SQK · farm coming soon' });
+    balances.push({ symbol: 'SQK', balance, decimals, status: EXTENSIONS.sqkFarm ? 'Official SQK token balance' : 'Official SQK · farm coming soon' });
   } catch { balances.push({ symbol: 'SQK', status: 'Official token read unavailable' }); }
   let premintVerified = false, premintStatus = 'Deployment receipt unavailable';
   try {
@@ -139,7 +139,7 @@ export async function loadTreasuryFees(snapshot: TreasurySnapshot, signal?: Abor
   const at = snapshot.block;
   if (at - DEPLOYMENT_BLOCK > 200_000n) throw Error('Full-history scan exceeds the browser limit. A verified indexer is required; cumulative revenue is unavailable.');
   const farmNames = ['CheeseFarmERC20', 'CheeseFarmETH', 'CheeseFarmSIMD'] as const;
-  await Promise.all(POOLS.map((pool,i) => requireRuntime(client, pool.address, evidence.contracts[farmNames[i]].runtimeHash, at)));
+  await Promise.all(POOLS.map((pool,i) => requireRuntime(client, pool.address, pool.id === 'sqk' ? EXTENSIONS.sqkFarm!.runtimeHash : evidence.contracts[farmNames[i]].runtimeHash, at)));
   const events: FeeEvent[] = [];
   for (let from = DEPLOYMENT_BLOCK; from <= at; from += 5000n) {
     if (signal?.aborted) throw Error('History request cancelled.');

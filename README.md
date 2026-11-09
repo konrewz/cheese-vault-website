@@ -7,8 +7,8 @@ The six pages are Home, Cheese Farm, My Portfolio, Treasury, How to Play and Swa
 ## Honest readiness
 
 - Pool targets: CHEESE 40%, ETH 20%, sIMD 20%, SQK 20%. Actual on-chain allocations are shown separately.
-- SQK token is verified on Sepolia, but its farm has no deployed/configured address in this release. SQK transaction controls remain disabled.
-- The sIMD asset and official Sepolia IMD conversion contracts remain unverified/unconfigured. Conversion is disabled, with no assumed rate, fee or output.
+- SQK Farm `0x247a2dabba2b4f5e97d8f5f9a12c9e17b1c1b920` is deployed and registered. Runtime, asset, and registration checks must pass before transaction controls enable.
+- Test-only sIMD wrapper `0xcb93f154d9ab512753964c49ad8be507ecec677f` is configured. It wraps received IMD units 1:1 and supports redemption, with reserve/runtime/decimals checks. Conversion and farm deposit are separate wallet transactions. This is not canonical production sIMD.
 - APR shows N/A when reliable prices/history are missing. USD TVL is unavailable; verified deposited quantities are shown in their own asset units.
 - No wallet secrets are required. No automatic owner operations, activation, deployment or financial transactions are included.
 
@@ -28,7 +28,7 @@ npm run preview
 
 Preview: http://127.0.0.1:5174. For browser QA, keep the preview running and run `npm run test:browser:install`, then `npm run test:browser`. On Linux, `PLAYWRIGHT_BROWSERS_PATH="$PWD/.playwright" npx playwright install --with-deps chromium` installs required system libraries as well. Browser tests intentionally block outside network requests; UI transaction tests use explicit fixtures and do not sign or broadcast.
 
-Latest local validation: 33 core tests, 99 UI/verification tests, 21 Chromium scenarios, TypeScript, ABI provenance and the production build passed. Production pages perform their original real RPC reads. The main bundle retains a size warning, not a build failure.
+Latest local validation: 33 core tests, 109 UI/verification tests, 25 Chromium scenarios, TypeScript, ABI provenance and the production build passed. Production pages perform their original real RPC reads. The main bundle retains a size warning, not a build failure.
 
 ## Cloudflare Pages
 

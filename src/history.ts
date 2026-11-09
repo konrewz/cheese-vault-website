@@ -6,7 +6,7 @@ export type HistoryEntry = {
   hash: Hash;
   account: Address;
   pool: PoolId;
-  kind: TransactionKind;
+  kind: TransactionKind | 'wrap' | 'redeem';
   amount: string;
   symbol: string;
   status: "pending" | "confirmed" | "reverted" | "cancelled" | "replaced";
@@ -24,8 +24,8 @@ try {
           !!x &&
           /^0x[0-9a-f]{64}$/i.test(x.hash) &&
           /^0x[0-9a-f]{40}$/i.test(x.account) &&
-          ["cheese", "eth", "simd"].includes(x.pool) &&
-          ["deposit", "withdraw", "claim", "approve"].includes(x.kind) &&
+          ["cheese", "eth", "simd", "sqk"].includes(x.pool) &&
+          ["deposit", "withdraw", "claim", "approve", "wrap", "redeem"].includes(x.kind) &&
           [
             "pending",
             "confirmed",
